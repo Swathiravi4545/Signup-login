@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
 import { getAuth, signInWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-// same config
 const firebaseConfig = {
   apiKey: "AIzaSyBk_-S1ObcmOrM7rn-tPD0rxAKckeoUuWU",
   authDomain: "signup-54596.firebaseapp.com",
@@ -21,12 +20,40 @@ document.getElementById("login-btn").addEventListener("click", function (e) {
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value.trim();
 
+   
+    if (email === "" || password === "") {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("Invalid email format.");
+        return;
+    }
+
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return;
+    }
+    
+
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             alert("Login Successful!");
             window.location.href = "dashboard.html";
         })
         .catch((error) => {
-            alert("Error: " + error.message);
+            let msg = error.code;
+
+            if (msg === "auth/invalid-credential") {
+                alert("Incorrect email or password.");
+            } else if (msg === "auth/user-not-found") {
+                alert("No account exists with this email.");
+            } else if (msg === "auth/wrong-password") {
+                alert("Incorrect password.");
+            } else {
+                alert("Login failed: " + error.message);
+            }
         });
 });
