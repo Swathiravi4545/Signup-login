@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
 import { getAuth, createUserWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBk_-S1ObcmOrM7rn-tPD0rxAKckeoUuWU",
   authDomain: "signup-54596.firebaseapp.com",
@@ -21,13 +20,40 @@ document.getElementById('submit').addEventListener('click', (event) => {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
 
+  
+  if (email === "" || password === "") {
+      alert("Please fill in all fields.");
+      return;
+  }
+
+  
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+  }
+
+ 
+  if (password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+  }
+  
+
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       alert("Signup successful!");
       window.location.href = "index.html";
     })
     .catch((error) => {
-      alert("Error: " + error.message);
-      console.error(error);
+      let msg = error.code;
+
+      if (msg === "auth/email-already-in-use") {
+        alert("This email is already registered.");
+      } 
+      else {
+        alert("Signup Failed: " + error.message);
+      }
     });
 });
+
