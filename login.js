@@ -48,12 +48,16 @@ document.getElementById("login-btn").addEventListener("click", function (e) {
 
             if (msg === "auth/invalid-credential") {
                 alert("Incorrect email or password.");
-            } else if (msg === "auth/user-not-found") {
+            } 
+            else if (msg === "auth/user-not-found") {
                 alert("No account exists with this email.");
-            } else if (msg === "auth/wrong-password") {
+            } 
+            else if (msg === "auth/wrong-password") {
                 alert("Incorrect password.");
-            } else {
+            } 
+            else {
                 alert("Login failed: " + error.message);
             }
         });
 });
+
